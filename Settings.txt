@@ -1,0 +1,2 @@
+orange = weeks=1
+red = weeks=4

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block css %}
+  /* Custom CSS for the home page */
+  .hero {
+    background-image: url("/static/images/my-image.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    font-size: 48px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .hero p {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
+
+  .cta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .cta a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fec89a;
+    color: white;
+    border-radius: 5px;
+    font-size: 24px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .cta a:hover {
+    background-color: #edf2e3;
+  }
+{% endblock %}
+
+{% block main %}
+  <div class="hero">
+    <div class="container">
+      <h2>Welcome to Sweet Net</h2>
+      <p></p>
+      <div class="cta">
+        <a href="/register">Register</a>
+        <a href="/login">Log in</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

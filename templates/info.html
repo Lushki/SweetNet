@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Info{% endblock %}
+
+{% block css %}
+  #info-container {
+    width: 80%;
+    margin: auto;
+    margin-top: 50px;
+    box-sizing: border-box;
+    background-color: #f9dcc4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .info-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .info-description {
+    margin-bottom: 20px;
+  }
+
+  .info-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+{% endblock %}
+
+{% block main %}
+    <div id="info-container">
+        <div class="info-title">Understanding the Map</div>
+        <div class="info-description">
+            The map displays different points, each representing a user's location.
+        </div>
+        <div class="info-description">
+            Each point has a different color, representing the status of the user:
+            <ul>
+                <li>
+                    <img class="info-icon" src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" alt="Green Point Icon">
+                    Green: The user is currently available.
+                </li>
+                <li>
+                    <img class="info-icon" src="https://maps.google.com/mapfiles/ms/icons/orange-dot.png" alt="Orange Point Icon">
+                    Orange: The user's status is under review.
+                </li>
+                <li>
+                    <img class="info-icon" src="https://maps.google.com/mapfiles/ms/icons/red-dot.png" alt="Red Point Icon">
+                    Red: The user is currently unavailable.
+                </li>
+            </ul>
+        </div>
+        <div class="info-description">
+            By clicking on a point, or the point button you can go to the profile of that user see what they have available and open a chat with them.
+        </div>
+        <div class="info-description">
+            The '+' button at the bottom right corner of the page allows you to add a new point of your own.
+        </div>
+    </div>
+{% endblock %}

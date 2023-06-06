@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add Point
+{% endblock %}
+
+{% block css %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        padding: 10px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f7f7f7;
+    }
+    label {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+    input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    input[type="checkbox"] {
+        margin-top: 10px;
+    }
+    input[type="submit"] {
+        margin-top: 20px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #fec89a;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    input[type="submit"]:hover {
+        background-color: #fdab76;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('add_point') }}" method="POST">
+        <label for="address">Address in Hebrew:</label>
+        <input type="text" id="address" name="address_hebrew" placeholder="Enter the address in Hebrew" required>
+
+        <label for="emergency">Available to assist in emergency:</label>
+        <input type="checkbox" id="emergency" name="emergency" value="1">
+
+        <input type="submit" value="Add Point">
+    </form>
+{% endblock %}
+

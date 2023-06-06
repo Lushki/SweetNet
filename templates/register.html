@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block css %}
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f8edeb;
+        color: #4a4a4a;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 30px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        #color: #fec89a;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    label {
+        margin-right: 10px;
+    }
+
+    input[type="text"], input[type="password"] {
+        height: 50px;
+        width: 100%;
+        border: none;
+        border-radius: 25px;
+        padding: 0 20px;
+        font-size: 18px;
+        margin-bottom: 20px;
+        background-color: #f7f7f7;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="submit"], input[type="button"] {
+        height: 50px;
+        width: 100%;
+        border: none;
+        border-radius: 25px;
+        padding: 0 20px;
+        font-size: 18px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    input[type="submit"]:hover, input[type="button"]:hover {
+        background-color: #fec89a;
+    }
+
+    .diabetic-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .button-container {
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+{% endblock %}
+
+{% block main %}
+    <form method="post">
+        <h1>Register</h1>
+        <div class="input-title">First Name:</div>
+        <input type="text" class="first-name-text" name="fn">
+        <div class="input-title">Last Name:</div>
+        <input type="text" class="last-name-text" name="ln">
+        <div class="input-title">Phone:</div>
+        <input type="text" class="phone-text" name="ph">
+        <div class="input-title">Password:</div>
+        <input type="password" class="password-text" name="ps">
+        <div class="input-title">Confirm Password:</div>
+        <input type="password" class="password-text" name="psC">
+        <div class="diabetic-label">
+            <label for="diabetic">Diabetic:</label>
+            <input type="checkbox" id="diabetic" class="diabetic-checkbox">
+        </div>
+        <div class="button-container">
+            <a href="{{ url_for('login') }}"><input type="button" class="sign-up-button" value="Log In"></a>
+            <input type="submit" class="sign-in-button" value="Continue">
+        </div>
+    </form>
+{% endblock %}

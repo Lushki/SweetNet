@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}
+User Profile: {{ user.first_name }} {{ user.last_name }}
+{% endblock %}
+
+{% block css %}
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f8edeb;
+      color: #4a4a4a;
+      margin: 0;
+      padding: 0;
+    }
+
+    #profileWindow {
+      width: 700px;
+      height: 400px; /* Fixed height */
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow-y: auto; /* Enable vertical scrolling */
+      background-color: #f7f7f7;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #profileWindow h2 {
+      color: #333;
+    }
+
+    #profileWindow p {
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #fec89a;
+      width: fit-content;
+      margin: 10px 0;
+      line-height: 1.5;
+    }
+
+    #profileWindow .point-item {
+      margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+      height: 30px;
+      width: 100px;
+      border: none;
+      border-radius: 15px;
+      padding: 0 10px;
+      font-size: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+      color: white;
+      background-color: #fec89a;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .chat-btn {
+      display: inline-block;
+      height: 40px;
+      padding: 0 20px;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      line-height: 40px;
+      color: white;
+      background-color: #fec89a;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .chat-btn:hover {
+      background-color: #f7b581;
+    }
+
+    .add-item-form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .add-item-form input[type="text"] {
+      height: 30px;
+      width: 200px;
+      border: none;
+      border-radius: 5px;
+      padding: 0 10px;
+      font-size: 14px;
+      transition: border-color 0.2s ease-in-out;
+    }
+
+    .add-item-form input[type="text"]:focus {
+      outline: none;
+      border-color: #fec89a;
+    }
+
+    .add-item-form select {
+      height: 30px;
+      width: 100px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.2s ease-in-out;
+    }
+
+    .add-item-form select:focus {
+      outline: none;
+      border-color: #fec89a;
+    }
+
+    .add-item-form button[type="submit"] {
+      height: 30px;
+      width: 60px;
+      border-radius: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      color: white;
+      background-color: #fec89a;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .add-item-form button[type="submit"]:hover {
+      background-color: #f7b581;
+    }
+
+  </style>
+{% endblock %}
+
+{% block main %}
+    <h1>{{ user.first_name }} {{ user.last_name }}</br>
+        <p>Phone: {{ user.phone }}</p>
+        <a href="{{ url_for('chat', partner_id=user.id) }}" class="chat-btn">Chat</a>
+    </h1>
+
+    <div id="profileWindow">
+        <h2>Points:</h2>
+        {% for point in user.points %}
+            <div class="point-item">
+                <p>Location: {{ point.location_hebrew }} |
+                    Status:
+                    {% if point.color == 'green' %}Available
+                    {% elif point.color == 'orange' %}On Review
+                    {% else %}Unavailable{% endif %} |
+                    Emergency Assist: {% if point.assist == 1 %}Yes{% else %}No{% endif %}
+                </p>
+
+                {% if session['user_id'] == user.id %}
+                    <form method="POST" action="{{ url_for('delete_point', point_id=point.id) }}">
+                        <button type="submit" class="delete-button">Delete Point</button>
+                    </form>
+
+                    <h3>Add Item:</h3>
+                    <form method="POST" action="{{ url_for('add_item') }}" class="add-item-form">
+                        <input type="hidden" name="point_id" value="{{ point.id }}">
+                        <input type="text" name="item" placeholder="Enter item">
+                        <label for="assist">Assist:</label>
+                        <select name="assist" id="assist">
+                            <option value="1" {% if point.assist == 1 %}selected{% endif %}>Yes</option>
+                            <option value="0" {% if point.assist == 0 %}selected{% endif %}>No</option>
+                        </select>
+                        <button type="submit">Add</button>
+                    </form>
+                {% endif %}
+
+                <h3>Items:</h3>
+                <ul>
+                    {% for item in point.point_items %}
+                        <li>
+                            {{ item.item }}
+
+                            {% if session['user_id'] == user.id %}
+                                <form method="POST" action="{{ url_for('delete_item', point_item_id=item.id) }}">
+                                    <button type="submit" class="delete-button">Delete Item</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

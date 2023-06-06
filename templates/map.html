@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Map{% endblock %}
+
+{% block css %}
+  #map-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 80px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #map {
+    width: 80%;
+    height: 100%;
+  }
+
+  #point-list {
+    width: 20%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f9dcc4;
+    border: 2px solid #fec89a;
+    border-radius: 10px;
+  }
+
+  .point {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .point-button {
+    background-color: #fec89a;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .point-button:hover {
+    background-color: #f9dcc4;
+  }
+
+  .point-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  .point-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .point-info div {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .location-box {
+    margin-top: 20px;
+  }
+
+  .location-box label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+
+  .location-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .add-point-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fec89a;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .add-point-button:hover {
+    background-color: #f9dcc4;
+  }
+{% endblock %}
+
+{% block main %}
+    <h1>Map</h1>
+    <div id="point-list">
+        {% for point in points %}
+            <div class="point">
+                <!-- Button for each point -->
+                <button id="point-button-{{ point.id }}" class="point-button" onclick="redirectToChatRoom({{ point.user.id }})">
+                    <img class="point-icon" src="https://maps.google.com/mapfiles/ms/icons/{{ point.color }}-dot.png" alt="Point icon">
+                    <div class="point-info">
+                        <div class="name">Name: {{ point.user.first_name }} {{ point.user.last_name }}</div>
+                        <div class="location">Location: {{ point.location_hebrew }}</div>  <!-- Updated to display location_hebrew -->
+                        <div class="status">Status:
+                            {% if point.color == "green" %}
+                                Available
+                            {% elif point.color == "orange" %}
+                                On Review
+                            {% elif point.color == "red" %}
+                                Unavailable
+                            {% endif %}
+                        </div>
+                    </div>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="map"></div>
+    <!-- Button to add a new point -->
+    <button class="add-point-button" onclick="location.href='/add_point_form'">
+        <i class="fas fa-map-marker-alt"></i>
+        <i class="fas fa-plus" style="font-size: 12px; position: absolute; top: 4px; right: 4px;"></i>
+    </button>
+    <script>
+         function initMap() {
+            // Set the initial map center
+            var myLatLng = {lat: 31.9038, lng: 35.0160};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: myLatLng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            {% for point in points %}
+            // Create a marker for each point on the map
+            var icon = {
+                url: "https://maps.google.com/mapfiles/ms/icons/" + "{{ point.color }}" + "-dot.png",
+                scaledSize: new google.maps.Size(32, 32),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(16, 16)
+            };
+
+            var marker = new google.maps.Marker({
+                position: {lat: {{ point.latitude }}, lng: {{ point.longitude }}},
+                map: map,
+                icon: icon,
+                title: '{{ point.user.first_name }} {{ point.user.last_name }} | {{ point.location_hebrew }}'
+            });
+
+            // Add a click event listener to the marker to redirect to user's page
+            marker.addListener('click', function() {
+                window.location.href = '/user/' + '{{ point.user.id }}';
+            });
+
+            // Geocode the marker's position to get the formatted address
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({location: marker.getPosition()}, function(results, status) {
+                if (status === "OK") {
+                    var address = results[0].formatted_address;
+                    var button = document.getElementById("point-button-" + {{ point.id }});
+                    var locationDiv = button.querySelector(".location");
+                    locationDiv.innerHTML = "Location: " + "{{ point.location_hebrew }}";
+                } else {
+                    console.log("Geocode was not successful for the following reason: " + status);
+                }
+            });
+            {% endfor %}
+        }
+    </script>
+    <script>
+        // Function to redirect to the chat room of a specific point's user
+        function redirectToChatRoom(pointUserId) {
+            window.location.href = `/user/${pointUserId}`;
+        }
+    </script>
+    <!-- Include the Google Maps API with the provided key -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap"></script>
+{% endblock %}

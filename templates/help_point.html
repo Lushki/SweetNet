@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Help Point
+{% endblock %}
+
+{% block css %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #d9b99b;
+    }
+    #utilities-list {
+        width: 200%;
+        margin: 0 auto;
+        margin-top: 50px;
+        overflow: auto;
+        height: 700px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f7f7f7;
+    }
+    #utilities-list li {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #fec89a;
+    }
+    #status {
+        color: #00cc00;  /* brighter shade of green */
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<h1>Help Point: Maccabim-Reut MOR High School</h1>
+<hr>
+<p>Emergency Assistance: <span id="status">Status</span></p>
+<h2>Utilities:</h2>
+<div id="utilities-list">
+    <li>Diabetic Test Strips</li>
+    <li>Insulin Pens</li>
+    <li>Blood Glucose Monitor</li>
+    <li>Insulin Pump</li>
+    <li>Glucose Tablets</li>
+    <li>Ketone Test Strips</li>
+    <li>Lancing Device</li>
+    <li>Diabetes Logbook</li>
+    <li>Diabetes ID Bracelet</li>
+    <li>Insulin Cooler Travel Case</li>
+    <!-- Add more utilities as needed -->
+</div>
+{% endblock %}
