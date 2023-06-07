@@ -1,10 +1,6 @@
 import sys
 import os
 import subprocess
-from SystemSettings import EnvironmentConfigurator
-# config the env from the root directory requirements.txt
-configurator = EnvironmentConfigurator(sys, os, subprocess)
-configurator.config()
 
 # my module imports
 from time_datetime import time_delta, date_current_Get, time_current_Get
